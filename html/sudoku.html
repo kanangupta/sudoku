@@ -1,0 +1,304 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Sudoku Solver</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-02"><meta name="DC.source" content="sudoku.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Validity Check</a></li><li><a href="#3">Function to get 3x3 grids from input</a></li><li><a href="#4">Checks for possible candidates at a position</a></li><li><a href="#5">Update Function 1</a></li><li><a href="#6">Update Function 2</a></li><li><a href="#7">Recursive Call</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that calls other functions of X is a sample 9x9 sudoku matrix that the program uses when run without any parameters.</p><pre class="codeinput"><span class="keyword">function</span> [X,solved]=sudoku(X)
+[X,Xcell]=UpdateRecursively(X);
+<span class="keyword">if</span> ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
+    solved=false;
+    <span class="keyword">return</span> <span class="comment">%unsolvable</span>
+<span class="keyword">end</span>
+<span class="keyword">if</span> any(X(:)==0)
+    firstzero=find(X==0,1);
+    Y=X;
+    <span class="keyword">for</span> i=Xcell{firstzero}
+        X=Y;
+        X(firstzero)=i;
+        X=sudoku(X);
+        <span class="keyword">if</span> X&gt;0
+            <span class="keyword">if</span> valid_input(X)
+                solved=true;
+                <span class="keyword">return</span> <span class="comment">%solved</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Validity Check<a name="2"></a></h2><p>This function checks the validity of the input 9x9 matrix and determines if it's a valid sudoku puzzle.</p><pre class="codeinput"><span class="keyword">function</span> [valid,invalid]=valid_input(a)
+invalid=0;
+<span class="keyword">if</span> size(a)~=[9,9]
+    valid=false;
+    <span class="keyword">return</span>;
+<span class="keyword">end</span>
+<span class="keyword">if</span> ~(fix(a)==a &amp; a&lt;=9 &amp; a&gt;=0)
+    valid=false;
+    <span class="keyword">return</span>;
+<span class="keyword">end</span>
+<span class="keyword">for</span> i=1:3:7
+        <span class="keyword">for</span> j=1:3:7
+            temp=a(i:i+2,j:j+2);
+            <span class="keyword">if</span> ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
+                valid=false;
+                <span class="keyword">return</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">for</span> i=1:9
+    <span class="keyword">if</span> ~isequal(sort(nonzeros(a(i,1:end))),nonzeros(unique(a(i,1:end))))
+                invalid=a(i,1:end);
+                valid=false;
+                <span class="keyword">return</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">for</span> j=1:9
+    <span class="keyword">if</span> ~isequal(sort(nonzeros(a(1:end,j))),nonzeros(unique(a(1:end,j))))
+                invalid=a(1:end,j);
+                valid=false;
+                <span class="keyword">return</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+valid=true;
+<span class="keyword">end</span>
+</pre><h2>Function to get 3x3 grids from input<a name="3"></a></h2><p>This function gets the 9 3x3 sub grids from the input 9x9 matrix.</p><pre class="codeinput"><span class="keyword">function</span> sub_block=part_pos(a,row,col)
+index=1:3:7;
+sub_row=index(ceil(row/3));
+sub_col=index(ceil(col/3));
+sub_block=a(sub_row:sub_row+2,sub_col:sub_col+2);
+<span class="keyword">end</span>
+</pre><h2>Checks for possible candidates at a position<a name="4"></a></h2><p>This function evaluates</p><pre class="codeinput"><span class="keyword">function</span> v=missing2(X,i,j)
+full = 1:9;
+full(nonzeros(X(i,:))) = 0;
+full(nonzeros(X(:,j))) = 0;
+full(nonzeros(part_pos(X,i,j)))= 0;
+v = nonzeros(full)';
+<span class="keyword">end</span>
+</pre><h2>Update Function 1<a name="5"></a></h2><p>This function checks for missing places in the cell and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> Xcell=UpdateX(X)
+    Xcell=num2cell(X);
+    <span class="keyword">for</span> j=1:9
+        <span class="keyword">for</span> i=1:9
+            <span class="keyword">if</span> X(i,j)==0
+                Xcell{i,j}=missing2(X,i,j);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Update Function 2<a name="6"></a></h2><p>Similar to the previous function, this function checks for missing places in the 9x9 grid and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> X=UpdateX2(X,Xcell)
+    <span class="keyword">for</span> j=1:9
+        <span class="keyword">for</span> i=1:9
+            <span class="keyword">if</span> size(Xcell{i,j},2)==1
+                X(i,j)=Xcell{i,j};
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Recursive Call<a name="7"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, PossibleCell]=UpdateRecursively(X)
+    PossibleCell=UpdateX(X);
+    Xnew=UpdateX2(X,PossibleCell);
+    <span class="keyword">while</span> abs(sum(sum(Xnew-X)))&gt;0
+        X=Xnew;
+        PossibleCell=UpdateX(X);
+        Xnew=UpdateX2(X,PossibleCell);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Sudoku Solver
+% This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
+% kind using a brute force algorithm called backtracking.
+
+%% Main Function
+% This is the main function that calls other functions of 
+% X is a sample 9x9 sudoku matrix that the program uses when run without
+% any parameters.
+
+function [X,solved]=sudoku(X)
+[X,Xcell]=UpdateRecursively(X);
+if ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
+    solved=false;
+    return %unsolvable
+end
+if any(X(:)==0)
+    firstzero=find(X==0,1);
+    Y=X;
+    for i=Xcell{firstzero}
+        X=Y;
+        X(firstzero)=i;
+        X=sudoku(X);
+        if X>0
+            if valid_input(X)
+                solved=true;
+                return %solved
+            end
+        end
+        end
+    end
+end
+
+%% Validity Check
+% This function checks the validity of the input 9x9 matrix and determines
+% if it's a valid sudoku puzzle.
+
+function [valid,invalid]=valid_input(a)
+invalid=0;
+if size(a)~=[9,9]
+    valid=false;
+    return;
+end
+if ~(fix(a)==a & a<=9 & a>=0)
+    valid=false;
+    return;
+end
+for i=1:3:7
+        for j=1:3:7
+            temp=a(i:i+2,j:j+2);
+            if ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
+                valid=false;
+                return;
+            end
+        end
+end
+for i=1:9
+    if ~isequal(sort(nonzeros(a(i,1:end))),nonzeros(unique(a(i,1:end))))
+                invalid=a(i,1:end);
+                valid=false;
+                return;
+    end
+end
+for j=1:9
+    if ~isequal(sort(nonzeros(a(1:end,j))),nonzeros(unique(a(1:end,j))))
+                invalid=a(1:end,j);
+                valid=false;
+                return;
+    end
+end
+valid=true;
+end
+
+%% Function to get 3x3 grids from input
+% This function gets the 9 3x3 sub grids from the input 9x9 matrix.
+
+function sub_block=part_pos(a,row,col)
+index=1:3:7;
+sub_row=index(ceil(row/3));
+sub_col=index(ceil(col/3));
+sub_block=a(sub_row:sub_row+2,sub_col:sub_col+2);
+end
+
+%% Checks for possible candidates at a position
+% This function evaluates 
+
+function v=missing2(X,i,j)
+full = 1:9; 
+full(nonzeros(X(i,:))) = 0; 
+full(nonzeros(X(:,j))) = 0; 
+full(nonzeros(part_pos(X,i,j)))= 0; 
+v = nonzeros(full)'; 
+end
+
+%% Update Function 1
+% This function checks for missing places in the cell and updates them as
+% necessary.
+
+function Xcell=UpdateX(X)
+    Xcell=num2cell(X);
+    for j=1:9
+        for i=1:9
+            if X(i,j)==0
+                Xcell{i,j}=missing2(X,i,j);
+            end
+        end
+    end
+end
+                
+%% Update Function 2
+% Similar to the previous function, this function checks for missing
+% places in the 9x9 grid and updates them as necessary.
+
+function X=UpdateX2(X,Xcell)
+    for j=1:9
+        for i=1:9
+            if size(Xcell{i,j},2)==1
+                X(i,j)=Xcell{i,j};
+            end
+        end
+    end
+end
+
+%% Recursive Call
+% The 
+function [Xnew, PossibleCell]=UpdateRecursively(X)
+    PossibleCell=UpdateX(X);
+    Xnew=UpdateX2(X,PossibleCell);
+    while abs(sum(sum(Xnew-X)))>0
+        X=Xnew;
+        PossibleCell=UpdateX(X);
+        Xnew=UpdateX2(X,PossibleCell);
+    end
+end
+
+##### SOURCE END #####
+--></body></html>
