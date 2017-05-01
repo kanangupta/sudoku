@@ -1,4 +1,13 @@
-function [X,solved]=sudoku(X) %testcommit
+%% Sudoku Solver
+% This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
+% kind using a brute force algorithm called backtracking.
+
+%% Main Function
+% This is the main function that calls other functions of 
+% X is a sample 9x9 sudoku matrix that the program uses when run without
+% any parameters.
+
+function [X,solved]=sudoku(X)
 [X,Xcell]=UpdateRecursively(X);
 if ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
     solved=false;
@@ -20,6 +29,10 @@ if any(X(:)==0)
         end
     end
 end
+
+%% Validity Check
+% This function checks the validity of the input 9x9 matrix and determines
+% if it's a valid sudoku puzzle.
 
 function [valid,invalid]=valid_input(a)
 invalid=0;
@@ -57,12 +70,18 @@ end
 valid=true;
 end
 
+%% Function to get 3x3 grids from input
+% This function gets the 9 3x3 sub grids from the input 9x9 matrix.
+
 function sub_block=part_pos(a,row,col)
 index=1:3:7;
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
 sub_block=a(sub_row:sub_row+2,sub_col:sub_col+2);
 end
+
+%% Checks for possible candidates at a position
+% This function evaluates 
 
 function v=missing2(X,i,j)
 full = 1:9; 
@@ -71,6 +90,10 @@ full(nonzeros(X(:,j))) = 0;
 full(nonzeros(part_pos(X,i,j)))= 0; 
 v = nonzeros(full)'; 
 end
+
+%% Update Function 1
+% This function checks for missing places in the cell and updates them as
+% necessary.
 
 function Xcell=UpdateX(X)
     Xcell=num2cell(X);
@@ -83,6 +106,9 @@ function Xcell=UpdateX(X)
     end
 end
                 
+%% Update Function 2
+% Similar to the previous function, this function checks for missing
+% places in the 9x9 grid and updates them as necessary.
 
 function X=UpdateX2(X,Xcell)
     for j=1:9
@@ -94,6 +120,8 @@ function X=UpdateX2(X,Xcell)
     end
 end
 
+%% Recursive Call
+% The 
 function [Xnew, PossibleCell]=UpdateRecursively(X)
     PossibleCell=UpdateX(X);
     Xnew=UpdateX2(X,PossibleCell);
