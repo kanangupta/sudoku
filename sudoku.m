@@ -8,8 +8,16 @@
 % any parameters.
 
 function [X,solved]=sudoku(X)
+if ~nargin
+    X = input('Please input the sudoku puzzle as a 9x9 matrix of integers 1 to 9, and 0 for blank spaces.\n Each entry in each row should be an integer from 0 to 9, separated by a space.\n Each row should be separated by a semicolon (;). The input should be enclosed in square brackets [ ].\n For example, a 3x3 matrix would be written like this: [1 2 3;4 5 6;7 8 9].\n ')
+    [valid,invalid]=valid_sudoku(X);
+    if ~valid
+        fprintf(invalid)
+        sudoku
+    end
+end
 [X,Xcell]=UpdateRecursively(X);
-if ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
+if ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     solved=false;
     return %unsolvable
 end
@@ -21,7 +29,7 @@ if any(X(:)==0)
         X(firstzero)=i;
         X=sudoku(X);
         if X>0
-            if valid_input(X)
+            if valid_sudoku(X)
                 solved=true;
                 return %solved
             end
@@ -34,38 +42,41 @@ end
 % This function checks the validity of the input 9x9 matrix and determines
 % if it's a valid sudoku puzzle.
 
-function [valid,invalid]=valid_input(a)
-invalid=0;
+function [valid,invalid]=valid_sudoku(a)
+invalid=false;
 if size(a)~=[9,9]
+    invalid='The input is not a 9x9 matrix.\n';
     valid=false;
     return;
 end
 if ~(fix(a)==a & a<=9 & a>=0)
+    invalid='The input should contain only integers 0 to 9.\n'
     valid=false;
     return;
 end
-for i=1:3:7
-        for j=1:3:7
-            temp=a(i:i+2,j:j+2);
-            if ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
-                valid=false;
-                return;
-            end
-        end
-end
 for i=1:9
     if ~isequal(sort(nonzeros(a(i,1:end))),nonzeros(unique(a(i,1:end))))
-                invalid=a(i,1:end);
+                invalid=sprintf('The input is an invalid puzzle. Some entries are being repeated in row %d.\n',i);
                 valid=false;
                 return;
     end
 end
 for j=1:9
     if ~isequal(sort(nonzeros(a(1:end,j))),nonzeros(unique(a(1:end,j))))
-                invalid=a(1:end,j);
+                invalid=sprintf('The input is an invalid puzzle. Some entries are being repeated in column %d\n.',j);
                 valid=false;
                 return;
     end
+end
+for i=1:3:7
+        for j=1:3:7
+            temp=a(i:i+2,j:j+2);
+            if ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
+                valid=false;
+                invalid=sprintf('Some elements are being repeated in the subblock starting at the position (%d,%d)\n.',i,j);
+                return;
+            end
+        end
 end
 valid=true;
 end
