@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Sudoku Solver</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-02"><meta name="DC.source" content="sudoku.m"><style type="text/css">
+      --><title>Sudoku Solver</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-04"><meta name="DC.source" content="sudoku.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,9 +66,46 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Validity Check</a></li><li><a href="#3">Function to get 3x3 grids from input</a></li><li><a href="#4">Checks for possible candidates at a position</a></li><li><a href="#5">Update Function 1</a></li><li><a href="#6">Update Function 2</a></li><li><a href="#7">Recursive Call</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that calls other functions of X is a sample 9x9 sudoku matrix that the program uses when run without any parameters.</p><pre class="codeinput"><span class="keyword">function</span> [X,solved]=sudoku(X)
-[X,Xcell]=UpdateRecursively(X);
-<span class="keyword">if</span> ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Update Function 1</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Recursive Call</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+<span class="keyword">if</span> ~nargin
+    X = input([<span class="string">' Please input the sudoku puzzle as a 9x9 matrix of '</span><span class="keyword">...</span>
+        <span class="string">'integers 1 to 9, and 0 for blank spaces.\n Each entry in'</span><span class="keyword">...</span>
+        <span class="string">' each row should be an integer from 0 to 9, separated by a '</span><span class="keyword">...</span>
+        <span class="string">'space.\n Each row should be separated by a semicolon (;). The'</span><span class="keyword">...</span>
+        <span class="string">' input should be enclosed in square brackets [ ].\n For example,'</span><span class="keyword">...</span>
+        <span class="string">' a 3x3 matrix would be written like this: [1 2 3;4 5 6;7 8 9].\n '</span>])
+<span class="keyword">end</span>
+
+<span class="comment">%  The 9x9 matrix is tested for validity before the solver is run.</span>
+
+[valid,invalid]=valid_sudoku(X);
+<span class="keyword">if</span> ~valid
+    fprintf(invalid)
+    sudoku
+<span class="keyword">end</span>
+
+<span class="comment">% Once the matrix is determined to be valid, then the solver is called. If</span>
+<span class="comment">% the solver solves the sudoku, then the solution is printed. Else, the</span>
+<span class="comment">% sudoku is declared to be unsolvable.</span>
+<span class="comment">% Either way, the program asks whether the user wants to solve another</span>
+<span class="comment">% sudoku puzzle, and depending upon the input, either restarts or quits.</span>
+
+[X,solved]=solver(X);
+<span class="keyword">if</span> solved
+    fprintf(<span class="string">'The solved sudoku is :\n\n'</span>)
+    fprintf([repmat(<span class="string">' %d '</span>, 1,9) <span class="string">'\n'</span>], X')
+<span class="keyword">else</span>
+    fprintf(<span class="string">'The given sudoku is an unsolvable puzzle.\n'</span>)
+<span class="keyword">end</span>
+again=input([<span class="string">'\n Do you want to solve another sudoku puzzle? Enter 0'</span><span class="keyword">...</span>
+    <span class="string">' for No, and any non-zero number for Yes.\n'</span>]);
+<span class="keyword">if</span> again
+    sudoku
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Solver Main Function<a name="2"></a></h2><pre class="codeinput"><span class="keyword">function</span> [X,solved]=solver(X)
+[X,Xcell]=RepeatCandidates(X);
+<span class="keyword">if</span> ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     solved=false;
     <span class="keyword">return</span> <span class="comment">%unsolvable</span>
 <span class="keyword">end</span>
@@ -78,9 +115,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
     <span class="keyword">for</span> i=Xcell{firstzero}
         X=Y;
         X(firstzero)=i;
-        X=sudoku(X);
+        X=solver(X);
         <span class="keyword">if</span> X&gt;0
-            <span class="keyword">if</span> valid_input(X)
+            <span class="keyword">if</span> valid_sudoku(X)
                 solved=true;
                 <span class="keyword">return</span> <span class="comment">%solved</span>
             <span class="keyword">end</span>
@@ -88,96 +125,196 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Validity Check<a name="2"></a></h2><p>This function checks the validity of the input 9x9 matrix and determines if it's a valid sudoku puzzle.</p><pre class="codeinput"><span class="keyword">function</span> [valid,invalid]=valid_input(a)
-invalid=0;
-<span class="keyword">if</span> size(a)~=[9,9]
+</pre><h2>Validity Check<a name="3"></a></h2><p>This function checks the validity of the input 9x9 matrix and determines if it's a valid sudoku puzzle.</p><p>The funtion, by default, assumes that the input is valid and checks against some conditions. If even one of the conditions is not met, then the input is declared as invalid and the program asks the user to reenter the input matrix.</p><pre class="codeinput"><span class="keyword">function</span> [valid,invalid]=valid_sudoku(X)
+invalid=false;
+
+<span class="comment">% The following part of the code checks if the input is a 9x9 matrix.</span>
+<span class="comment">% Input anything else and the program will tell you that the input is not</span>
+<span class="comment">% valid.</span>
+
+<span class="keyword">if</span> size(X)~=[9,9]
+    invalid=<span class="string">'The input is not a 9x9 matrix.\n'</span>;
     valid=false;
     <span class="keyword">return</span>;
 <span class="keyword">end</span>
-<span class="keyword">if</span> ~(fix(a)==a &amp; a&lt;=9 &amp; a&gt;=0)
+
+<span class="comment">% This part of the code checks if the 9x9 matrix contains only integers</span>
+<span class="comment">% from 0 to 9. Anything else would make the input invalid, and ask for a</span>
+<span class="comment">% reenter.</span>
+
+<span class="keyword">if</span> ~(fix(X)==X &amp; X&lt;=9 &amp; X&gt;=0)
+    invalid=<span class="string">'The input should contain only integers 0 to 9.\n'</span>
     valid=false;
     <span class="keyword">return</span>;
 <span class="keyword">end</span>
-<span class="keyword">for</span> i=1:3:7
-        <span class="keyword">for</span> j=1:3:7
-            temp=a(i:i+2,j:j+2);
+
+<span class="comment">% Then the input matrix is tested for violations within the same row or</span>
+<span class="comment">% column, a violation being repetition of entries within the same row or</span>
+<span class="comment">% column.</span>
+
+<span class="keyword">for</span> row=1:9
+    <span class="keyword">if</span> ~isequal(sort(nonzeros(X(row,1:end))),nonzeros(unique(X(row,1:end))))
+                invalid=sprintf(<span class="string">'The input is an invalid puzzle. Some entries are being repeated in row %d.\n'</span>,row);
+                valid=false;
+                <span class="keyword">return</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">for</span> col=1:9
+    <span class="keyword">if</span> ~isequal(sort(nonzeros(X(1:end,col))),nonzeros(unique(X(1:end,col))))
+                invalid=sprintf(<span class="string">'The input is an invalid puzzle. Some entries are being repeated in column %d\n.'</span>,col);
+                valid=false;
+                <span class="keyword">return</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Each 3x3 sub-grid is then tested for repetition of elements. If a</span>
+<span class="comment">% repetition has occurred, then the input is regarded as invalid.</span>
+
+<span class="keyword">for</span> row=1:3:7
+        <span class="keyword">for</span> col=1:3:7
+            temp=X(row:row+2,col:col+2);
             <span class="keyword">if</span> ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
                 valid=false;
+                invalid=sprintf(<span class="string">'Some elements are being repeated in the subblock starting at the position (%d,%d)\n.'</span>,row,col);
                 <span class="keyword">return</span>;
             <span class="keyword">end</span>
         <span class="keyword">end</span>
-<span class="keyword">end</span>
-<span class="keyword">for</span> i=1:9
-    <span class="keyword">if</span> ~isequal(sort(nonzeros(a(i,1:end))),nonzeros(unique(a(i,1:end))))
-                invalid=a(i,1:end);
-                valid=false;
-                <span class="keyword">return</span>;
-    <span class="keyword">end</span>
-<span class="keyword">end</span>
-<span class="keyword">for</span> j=1:9
-    <span class="keyword">if</span> ~isequal(sort(nonzeros(a(1:end,j))),nonzeros(unique(a(1:end,j))))
-                invalid=a(1:end,j);
-                valid=false;
-                <span class="keyword">return</span>;
-    <span class="keyword">end</span>
 <span class="keyword">end</span>
 valid=true;
 <span class="keyword">end</span>
-</pre><h2>Function to get 3x3 grids from input<a name="3"></a></h2><p>This function gets the 9 3x3 sub grids from the input 9x9 matrix.</p><pre class="codeinput"><span class="keyword">function</span> sub_block=part_pos(a,row,col)
+</pre><h2>Obtain Sub-Grid for a Position<a name="4"></a></h2><p>This function breaks the 9x9 input grid into 9 grids of of 3x3 each so that it becomes easy for the program to check for violation within the grid when a particular position is accessed.</p><p>More specifically, this function determines the sub-grid that a position belongs to when its row number and column number are supplied.</p><pre class="codeinput"><span class="keyword">function</span> block=sub_block(X,row,col)
+
+<span class="comment">%  Creates position indexes for the starting positions of sub-grids. Start</span>
+<span class="comment">%  at 1, increment by 3, stop at 7.</span>
+
 index=1:3:7;
+
+<span class="comment">%  Obtain the sub-grid's first row's number and first column's number from</span>
+<span class="comment">%  the row number and column number of the position supplied.</span>
+<span class="comment">%  'ceil' function rounds the result of the division to the next integer.</span>
+
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
-sub_block=a(sub_row:sub_row+2,sub_col:sub_col+2);
+
+<span class="comment">% Use the first row and first column to obtain the subgrid by incrementing</span>
+<span class="comment">% twice.</span>
+
+block=X(sub_row:sub_row+2,sub_col:sub_col+2);
 <span class="keyword">end</span>
-</pre><h2>Checks for possible candidates at a position<a name="4"></a></h2><p>This function evaluates</p><pre class="codeinput"><span class="keyword">function</span> v=missing2(X,i,j)
+</pre><h2>Find Possible Candidates<a name="5"></a></h2><p>This function evaluates the possible candidates at a position by elimination.</p><pre class="codeinput"><span class="keyword">function</span> candidates=missingcandidates(X,row,col)
+
+<span class="comment">% The first line declares an array containing the integers 1</span>
+<span class="comment">% through 9.</span>
+
 full = 1:9;
-full(nonzeros(X(i,:))) = 0;
-full(nonzeros(X(:,j))) = 0;
-full(nonzeros(part_pos(X,i,j)))= 0;
-v = nonzeros(full)';
+
+<span class="comment">% The second line checks what elements are present in the same row and</span>
+<span class="comment">% converts those elements to 0 in the array. The third line does the same</span>
+<span class="comment">% for the elements in the same column and the fourth repeats that for</span>
+<span class="comment">% elements in the same sub-grid.</span>
+
+full(nonzeros(X(row,:))) = 0;
+full(nonzeros(X(:,col))) = 0;
+full(nonzeros(sub_block(X,row,col)))= 0;
+
+<span class="comment">% The final line declares an array which contains all the non zero elements</span>
+<span class="comment">% of the array declared in the first line after the operation on the array</span>
+<span class="comment">% is complete. The function returns this array whenever called.</span>
+
+candidates = nonzeros(full)';
 <span class="keyword">end</span>
-</pre><h2>Update Function 1<a name="5"></a></h2><p>This function checks for missing places in the cell and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> Xcell=UpdateX(X)
+</pre><h2>Update Function 1<a name="6"></a></h2><p>This function checks for missing places in the cell and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> Xcell=CandidateCell(X)
     Xcell=num2cell(X);
-    <span class="keyword">for</span> j=1:9
-        <span class="keyword">for</span> i=1:9
-            <span class="keyword">if</span> X(i,j)==0
-                Xcell{i,j}=missing2(X,i,j);
+    <span class="keyword">for</span> col=1:9
+        <span class="keyword">for</span> row=1:9
+            <span class="keyword">if</span> X(row,col)==0
+                Xcell{row,col}=missingcandidates(X,row,col);
             <span class="keyword">end</span>
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Update Function 2<a name="6"></a></h2><p>Similar to the previous function, this function checks for missing places in the 9x9 grid and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> X=UpdateX2(X,Xcell)
-    <span class="keyword">for</span> j=1:9
-        <span class="keyword">for</span> i=1:9
-            <span class="keyword">if</span> size(Xcell{i,j},2)==1
-                X(i,j)=Xcell{i,j};
+</pre><h2>Fill Singletons<a name="7"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> X=FillSingletons(X,Xcell)
+    <span class="keyword">for</span> col=1:9
+        <span class="keyword">for</span> row=1:9
+            <span class="keyword">if</span> size(Xcell{row,col},2)==1
+                X(row,col)=Xcell{row,col};
             <span class="keyword">end</span>
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Recursive Call<a name="7"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, PossibleCell]=UpdateRecursively(X)
-    PossibleCell=UpdateX(X);
-    Xnew=UpdateX2(X,PossibleCell);
+</pre><h2>Recursive Call<a name="8"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, XCell]=RepeatCandidates(X)
+    XCell=CandidateCell(X);
+    Xnew=FillSingletons(X,XCell);
     <span class="keyword">while</span> abs(sum(sum(Xnew-X)))&gt;0
         X=Xnew;
-        PossibleCell=UpdateX(X);
-        Xnew=UpdateX2(X,PossibleCell);
+        XCell=CandidateCell(X);
+        Xnew=FillSingletons(X,XCell);
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 </pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Sudoku Solver
 % This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
-% kind using a brute force algorithm called backtracking.
+% kind using a brute force algorithm called backtracking. This html
+% documentation has been generated using MATLAB(R)'s publishing feature.
+% Text highlighted in green within code snippets are comments.
 
 %% Main Function
-% This is the main function that calls other functions of 
-% X is a sample 9x9 sudoku matrix that the program uses when run without
-% any parameters.
+%
+% This is the main function that gets executed first when the program is
+% run. Typing "sudoku" in the MATLAB(R) command window will run the program
+% without any arguments. In such a case, the program will ask the user to
+% enter a 9x9 sudoku matrix as the input argument.
+% Alternatively, the user can call the program with the 9x9 grid as an
+% argument.
+% 
 
-function [X,solved]=sudoku(X)
-[X,Xcell]=UpdateRecursively(X);
-if ~valid_input(X) || any(any(cellfun(@isempty,Xcell)))
+function sudoku(X)
+if ~nargin
+    X = input([' Please input the sudoku puzzle as a 9x9 matrix of '...
+        'integers 1 to 9, and 0 for blank spaces.\n Each entry in'...
+        ' each row should be an integer from 0 to 9, separated by a '...
+        'space.\n Each row should be separated by a semicolon (;). The'...
+        ' input should be enclosed in square brackets [ ].\n For example,'...
+        ' a 3x3 matrix would be written like this: [1 2 3;4 5 6;7 8 9].\n '])
+end
+
+%  The 9x9 matrix is tested for validity before the solver is run.
+
+[valid,invalid]=valid_sudoku(X);
+if ~valid
+    fprintf(invalid)
+    sudoku
+end
+
+% Once the matrix is determined to be valid, then the solver is called. If
+% the solver solves the sudoku, then the solution is printed. Else, the
+% sudoku is declared to be unsolvable.
+% Either way, the program asks whether the user wants to solve another
+% sudoku puzzle, and depending upon the input, either restarts or quits.
+
+[X,solved]=solver(X);
+if solved
+    fprintf('The solved sudoku is :\n\n')
+    fprintf([repmat(' %d ', 1,9) '\n'], X')
+else
+    fprintf('The given sudoku is an unsolvable puzzle.\n')
+end
+again=input(['\n Do you want to solve another sudoku puzzle? Enter 0'...
+    ' for No, and any non-zero number for Yes.\n']);
+if again
+    sudoku
+end
+end
+
+%% Solver Main Function
+% 
+% 
+% 
+
+function [X,solved]=solver(X)
+[X,Xcell]=RepeatCandidates(X);
+if ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     solved=false;
     return %unsolvable
 end
@@ -187,9 +324,9 @@ if any(X(:)==0)
     for i=Xcell{firstzero}
         X=Y;
         X(firstzero)=i;
-        X=sudoku(X);
+        X=solver(X);
         if X>0
-            if valid_input(X)
+            if valid_sudoku(X)
                 solved=true;
                 return %solved
             end
@@ -199,104 +336,178 @@ if any(X(:)==0)
 end
 
 %% Validity Check
+% 
 % This function checks the validity of the input 9x9 matrix and determines
 % if it's a valid sudoku puzzle.
+%
+% The funtion, by default, assumes that the
+% input is valid and checks against some conditions.
+% If even one of the conditions is not met, then the input 
+% is declared as invalid and the
+% program asks the user to reenter the input matrix.
+% 
 
-function [valid,invalid]=valid_input(a)
-invalid=0;
-if size(a)~=[9,9]
+function [valid,invalid]=valid_sudoku(X)
+invalid=false;
+
+% The following part of the code checks if the input is a 9x9 matrix.
+% Input anything else and the program will tell you that the input is not
+% valid.
+
+if size(X)~=[9,9] 
+    invalid='The input is not a 9x9 matrix.\n';
     valid=false;
     return;
 end
-if ~(fix(a)==a & a<=9 & a>=0)
+
+% This part of the code checks if the 9x9 matrix contains only integers
+% from 0 to 9. Anything else would make the input invalid, and ask for a
+% reenter.
+
+if ~(fix(X)==X & X<=9 & X>=0)
+    invalid='The input should contain only integers 0 to 9.\n'
     valid=false;
     return;
 end
-for i=1:3:7
-        for j=1:3:7
-            temp=a(i:i+2,j:j+2);
+
+% Then the input matrix is tested for violations within the same row or
+% column, a violation being repetition of entries within the same row or
+% column.
+
+for row=1:9
+    if ~isequal(sort(nonzeros(X(row,1:end))),nonzeros(unique(X(row,1:end))))
+                invalid=sprintf('The input is an invalid puzzle. Some entries are being repeated in row %d.\n',row);
+                valid=false;
+                return;
+    end
+end
+for col=1:9
+    if ~isequal(sort(nonzeros(X(1:end,col))),nonzeros(unique(X(1:end,col))))
+                invalid=sprintf('The input is an invalid puzzle. Some entries are being repeated in column %d\n.',col);
+                valid=false;
+                return;
+    end
+end
+
+% Each 3x3 sub-grid is then tested for repetition of elements. If a
+% repetition has occurred, then the input is regarded as invalid.
+
+for row=1:3:7
+        for col=1:3:7
+            temp=X(row:row+2,col:col+2);
             if ~isequal(sort(nonzeros(temp)),nonzeros(unique(temp)))
                 valid=false;
+                invalid=sprintf('Some elements are being repeated in the subblock starting at the position (%d,%d)\n.',row,col);
                 return;
             end
         end
 end
-for i=1:9
-    if ~isequal(sort(nonzeros(a(i,1:end))),nonzeros(unique(a(i,1:end))))
-                invalid=a(i,1:end);
-                valid=false;
-                return;
-    end
-end
-for j=1:9
-    if ~isequal(sort(nonzeros(a(1:end,j))),nonzeros(unique(a(1:end,j))))
-                invalid=a(1:end,j);
-                valid=false;
-                return;
-    end
-end
 valid=true;
 end
 
-%% Function to get 3x3 grids from input
-% This function gets the 9 3x3 sub grids from the input 9x9 matrix.
+%% Obtain Sub-Grid for a Position
+% 
+% This function breaks the 9x9 input grid into 9 grids of of 3x3 each so
+% that it becomes easy for the program to check for violation within the
+% grid when a particular position is accessed.
+% 
+% More specifically, this function determines the sub-grid that a position
+% belongs to when its row number and column number are supplied.
+% 
 
-function sub_block=part_pos(a,row,col)
+function block=sub_block(X,row,col)
+
+%  Creates position indexes for the starting positions of sub-grids. Start
+%  at 1, increment by 3, stop at 7.
+
 index=1:3:7;
+
+%  Obtain the sub-grid's first row's number and first column's number from
+%  the row number and column number of the position supplied.
+%  'ceil' function rounds the result of the division to the next integer.
+
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
-sub_block=a(sub_row:sub_row+2,sub_col:sub_col+2);
+
+% Use the first row and first column to obtain the subgrid by incrementing
+% twice.
+
+block=X(sub_row:sub_row+2,sub_col:sub_col+2);
 end
 
-%% Checks for possible candidates at a position
-% This function evaluates 
+%% Find Possible Candidates
+% 
+% This function evaluates the possible candidates at a position by
+% elimination.
+% 
 
-function v=missing2(X,i,j)
+function candidates=missingcandidates(X,row,col)
+
+% The first line declares an array containing the integers 1
+% through 9.
+
 full = 1:9; 
-full(nonzeros(X(i,:))) = 0; 
-full(nonzeros(X(:,j))) = 0; 
-full(nonzeros(part_pos(X,i,j)))= 0; 
-v = nonzeros(full)'; 
+
+% The second line checks what elements are present in the same row and
+% converts those elements to 0 in the array. The third line does the same
+% for the elements in the same column and the fourth repeats that for
+% elements in the same sub-grid.
+
+full(nonzeros(X(row,:))) = 0; 
+full(nonzeros(X(:,col))) = 0; 
+full(nonzeros(sub_block(X,row,col)))= 0; 
+
+% The final line declares an array which contains all the non zero elements
+% of the array declared in the first line after the operation on the array
+% is complete. The function returns this array whenever called.
+
+candidates = nonzeros(full)'; 
 end
 
 %% Update Function 1
+% 
 % This function checks for missing places in the cell and updates them as
 % necessary.
+%
 
-function Xcell=UpdateX(X)
+function Xcell=CandidateCell(X)
     Xcell=num2cell(X);
-    for j=1:9
-        for i=1:9
-            if X(i,j)==0
-                Xcell{i,j}=missing2(X,i,j);
+    for col=1:9
+        for row=1:9
+            if X(row,col)==0
+                Xcell{row,col}=missingcandidates(X,row,col);
             end
         end
     end
 end
                 
-%% Update Function 2
-% Similar to the previous function, this function checks for missing
-% places in the 9x9 grid and updates them as necessary.
+%% Fill Singletons
+% 
+% The
+% 
 
-function X=UpdateX2(X,Xcell)
-    for j=1:9
-        for i=1:9
-            if size(Xcell{i,j},2)==1
-                X(i,j)=Xcell{i,j};
+function X=FillSingletons(X,Xcell)
+    for col=1:9
+        for row=1:9
+            if size(Xcell{row,col},2)==1
+                X(row,col)=Xcell{row,col};
             end
         end
     end
 end
 
 %% Recursive Call
-% The 
-function [Xnew, PossibleCell]=UpdateRecursively(X)
-    PossibleCell=UpdateX(X);
-    Xnew=UpdateX2(X,PossibleCell);
+%
+% The
+%
+
+function [Xnew, XCell]=RepeatCandidates(X)
+    XCell=CandidateCell(X);
+    Xnew=FillSingletons(X,XCell);
     while abs(sum(sum(Xnew-X)))>0
         X=Xnew;
-        PossibleCell=UpdateX(X);
-        Xnew=UpdateX2(X,PossibleCell);
+        XCell=CandidateCell(X);
+        Xnew=FillSingletons(X,XCell);
     end
 end
 
