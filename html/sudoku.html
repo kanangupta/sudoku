@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Sudoku Solver</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-04"><meta name="DC.source" content="sudoku.m"><style type="text/css">
+      --><title>Sudoku Solver</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-05"><meta name="DC.source" content="sudoku.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined together, form the complete program.</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License in the LICENSE.md file for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a, and MATLAB&reg; Online (R2017a at the time of writing). As a result, it has been tested to run these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is just an assumption that hasn't been tested.</p><p>This code requires MATLAB&reg; to run. You need to have MATLAB&reg; installed on your system to run this program. Alternatively, you can use MATLAB&reg; Online to run this program which is just MATLAB&reg; running on the cloud. To run this program using MATLAB&reg; Online, upload the 'sudoku.m' file to your MATLAB&reg; Online's working directory and click on the 'Run' button in the EDITOR tab. If you have MATLAB installed on your system, open the source file in MATLAB&reg; and click on the 'Run' button from the EDITOR tab. In both the cases, the code will run without any arguments and ask the user for the input Sudoku puzzle before proceeding.</p><p><img vspace="5" hspace="5" src="NoArguments.PNG" alt=""> </p><p>If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an example input matrix.</p><p><img vspace="5" hspace="5" src="WithArg.PNG" alt=""> </p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments and the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined together, form the complete program.</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License in the LICENSE.md file for more details. If the LICENSE file is missing, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a, and MATLAB&reg; Online (R2017a at the time of writing). As a result, it has been tested to run on these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is just an assumption that hasn't been tested.</p><p>This code requires MATLAB&reg; to run. You need to have MATLAB&reg; installed on your system to run this program. Alternatively, you can use MATLAB&reg; Online to run this program which is just MATLAB&reg; running on the cloud. To run this program using MATLAB&reg; Online, upload the 'sudoku.m' file to your MATLAB&reg; Online's working directory and click on the 'Run' button in the EDITOR tab. If you have MATLAB&reg; R2015a or later installed on your system, open the source file in MATLAB&reg; and click on the 'Run' button from the EDITOR tab. In both the cases, the code will run without any arguments and ask the user for the input Sudoku puzzle before proceeding.</p><p><img vspace="5" hspace="5" src="NoArguments.PNG" alt=""> </p><p>If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an example input matrix.</p><p><img vspace="5" hspace="5" src="WithArg.PNG" alt=""> </p><p>The following sections of this webpage contain the documented code for the easy understanding of anyone who wishes to reuse this code in part or full. This, along with the README.md and LICENSE.md file, form the complete documentation for this project.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments and the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
 
 <span class="comment">% When run without any arguments, the programs will prompt the user to</span>
 <span class="comment">% input the Sudoku puzzle.</span>
@@ -279,12 +279,11 @@ candidates = nonzeros(full)';
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License in the LICENSE.md file for more details.
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+% If the LICENSE file is missing, see <http://www.gnu.org/licenses/>.
 % 
 % This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
 % MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
-% tested to run these versions of MATLAB(R). It should run on newer
+% tested to run on these versions of MATLAB(R). It should run on newer
 % versions and might run on versions a few years old, but this is just an
 % assumption that hasn't been tested.
 % 
@@ -294,10 +293,10 @@ candidates = nonzeros(full)';
 % To run this program using MATLAB(R) Online, upload the 'sudoku.m' file 
 % to your MATLAB(R) Online's working directory and click on the 'Run'
 % button in the EDITOR tab.
-% If you have MATLAB installed on your system, open the source file in
-% MATLAB(R) and click on the 'Run' button from the EDITOR tab. In both the
-% cases, the code will run without any arguments and ask the user for the
-% input Sudoku puzzle before proceeding.
+% If you have MATLAB(R) R2015a or later installed on your system, 
+% open the source file in MATLAB(R) and click on the 'Run' button from the
+% EDITOR tab. In both the cases, the code will run without any arguments
+% and ask the user for the input Sudoku puzzle before proceeding.
 % 
 % <<NoArguments.PNG>>
 % 
@@ -308,6 +307,10 @@ candidates = nonzeros(full)';
 % 
 % <<WithArg.PNG>>
 % 
+% The following sections of this webpage contain the documented code for
+% the easy understanding of anyone who wishes to reuse this code in part or
+% full. This, along with the README.md and LICENSE.md file, form the
+% complete documentation for this project.
 
 %% Main Function
 %

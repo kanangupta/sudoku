@@ -13,12 +13,11 @@
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License in the LICENSE.md file for more details.
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+% If the LICENSE file is missing, see <http://www.gnu.org/licenses/>.
 % 
 % This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
 % MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
-% tested to run these versions of MATLAB(R). It should run on newer
+% tested to run on these versions of MATLAB(R). It should run on newer
 % versions and might run on versions a few years old, but this is just an
 % assumption that hasn't been tested.
 % 
@@ -38,7 +37,7 @@
 % If the user already has 9x9
 % matrices of Sudoku puzzles in the workspace, then typing
 % 'sudoku(Sample1)' in the command window will run the program where
-% 'Sample1' as the input matrix.
+% 'Sample1' is an example input matrix.
 % 
 % <<WithArg.PNG>>
 % 

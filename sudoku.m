@@ -13,8 +13,7 @@
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License in the LICENSE.md file for more details.
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+% If the LICENSE file is missing, see <http://www.gnu.org/licenses/>.
 % 
 % This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
 % MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
@@ -28,10 +27,10 @@
 % To run this program using MATLAB(R) Online, upload the 'sudoku.m' file 
 % to your MATLAB(R) Online's working directory and click on the 'Run'
 % button in the EDITOR tab.
-% If you have MATLAB installed on your system, open the source file in
-% MATLAB(R) and click on the 'Run' button from the EDITOR tab. In both the
-% cases, the code will run without any arguments and ask the user for the
-% input Sudoku puzzle before proceeding.
+% If you have MATLAB(R) R2015a or later installed on your system, 
+% open the source file in MATLAB(R) and click on the 'Run' button from the
+% EDITOR tab. In both the cases, the code will run without any arguments
+% and ask the user for the input Sudoku puzzle before proceeding.
 % 
 % <<NoArguments.PNG>>
 % 
@@ -42,6 +41,10 @@
 % 
 % <<WithArg.PNG>>
 % 
+% The following sections of this webpage contain the documented code for
+% the easy understanding of anyone who wishes to reuse this code in part or
+% full. This, along with the README.md and LICENSE.md file, form the
+% complete documentation for this project.
 
 %% Main Function
 %
