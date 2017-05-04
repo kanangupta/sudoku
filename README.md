@@ -26,70 +26,70 @@ is a practical method to solve Sudoku puzzles. This program solves most
 Sudoku puzzles in about a second, which is an acceptable execution time
 for brute force approach to solving Sudokus.
 
-HOW TO USE THIS PROGRAM
+#### HOW TO USE THIS PROGRAM
 
-	I	PURPOSE
-	II	SYSTEM REQUIREMENTS
-	III	INSTALLATION
-	IV	EXECUTION
-	V	SAMPLES
-	VI	SUPPORT
+######	I	PURPOSE
+######	II	SYSTEM REQUIREMENTS
+######	III	INSTALLATION
+######	IV	EXECUTION
+######	V	SAMPLES
+######	VI	SUPPORT
 
-I	PURPOSE
+####	I	PURPOSE
 
-	This program solves 9x9 Sudoku puzzles using a brute force algorithm called
-	Backtracking. This brute force algorithm visits the empty cells in some order,
-	filling in digits sequentially, or backtracking when the number is found to
-	be not valid. Briefly, a program would solve a puzzle by placing the
-	digit "1" in the first cell and checking if it is allowed to be there.
-	If there are no violations (checking row, column, and box constraints) then
-	the algorithm advances to the next cell, and places a "1" in that cell.
-	When checking for violations, if it is discovered that the "1" is not allowed,
-	the value is advanced to "2". If a cell is discovered where none of the 9
-	digits is allowed, then the algorithm leaves that cell blank and moves back
-	to the previous cell. The value in that cell is then incremented by one.
-	This is repeated until the allowed value in the last (81st) cell is discovered.
+This program solves 9x9 Sudoku puzzles using a brute force algorithm called
+Backtracking. This brute force algorithm visits the empty cells in some order,
+filling in digits sequentially, or backtracking when the number is found to
+be not valid. Briefly, a program would solve a puzzle by placing the
+digit "1" in the first cell and checking if it is allowed to be there.
+If there are no violations (checking row, column, and box constraints) then
+the algorithm advances to the next cell, and places a "1" in that cell.
+When checking for violations, if it is discovered that the "1" is not allowed,
+the value is advanced to "2". If a cell is discovered where none of the 9
+digits is allowed, then the algorithm leaves that cell blank and moves back
+to the previous cell. The value in that cell is then incremented by one.
+This is repeated until the allowed value in the last (81st) cell is discovered.
 
-	Advantages of this method are:
+Advantages of this method are:
 
-		1.	A solution is guaranteed (as long as the puzzle is valid).
-		2.	Solving time is mostly unrelated to degree of difficulty.
+   1.	A solution is guaranteed (as long as the puzzle is valid).
+   2.	Solving time is mostly unrelated to degree of difficulty.
 
-II	SYSTEM REQUIREMENTS
+####	II	SYSTEM REQUIREMENTS
 
-		1 gigahertz (GHz) or faster 32-bit (x86) or 64-bit (x64) processor
-		1 gigabyte (GB) RAM (32-bit) or 2 GB RAM (64-bit)
-		MATLAB(R) R2015a or later installed
-		
-	-OR-
+   1 gigahertz (GHz) or faster 32-bit (x86) or 64-bit (x64) processor
+   1 gigabyte (GB) RAM (32-bit) or 2 GB RAM (64-bit)
+   MATLAB(R) R2015a or later installed
 
-		Computer with Internet access
-		Browser capable of running MATLAB(R) Online (Chrome 50 or later should be fine)
+-OR-
+
+   Computer with Internet access
+   Browser capable of running MATLAB(R) Online (Chrome 50 or later should be fine)
+
+####	III	INSTALLATION
 	
-III	INSTALLATION
+This program doesn't need to be installed to run. However, you need to have either
+MATLAB(R) R2015a or later installed or access to a MATLAB(R) Online account to run
+this program. Depending upon what you have, either upload the 'sudoku.m' file to
+your MATLAB(R) Online working directory or open it in MATLAB(R) installed in your
+system. This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
+MATLAB(R) Online (R2017a at the time of writing), so it will run fine on any of these
+versions of MATLAB(R). It will run on newer versions and may run on older versions,
+but this hasn't been tested.
 	
-	This program doesn't need to be installed to run. However, you need to have either
-	MATLAB(R) R2015a or later installed or access to a MATLAB(R) Online account to run
-	this program. Depending upon what you have, either upload the 'sudoku.m' file to
-	your MATLAB(R) Online working directory or open it in MATLAB(R) installed in your
-	system. This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
-	MATLAB(R) Online (R2017a at the time of writing), so it will run fine on any of these
-	versions of MATLAB(R). It will run on newer versions and may run on older versions,
-	but this hasn't been tested.
+####	IV	EXECUTION
 	
-IV	EXECUTION
-	
-	Once you have the file open in MATLAB(R), run this program by clicking on the 'Run'
-	button in the EDITOR tab. The code will run without any arguments and ask the user 
-	for the input Sudoku puzzle before proceeding.
+Once you have the file open in MATLAB(R), run this program by clicking on the 'Run'
+button in the EDITOR tab. The code will run without any arguments and ask the user 
+for the input Sudoku puzzle before proceeding.
 
-	If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing
-	'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an
-	example input matrix.
+If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing
+'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an
+example input matrix.
 	
-V	SAMPLES
+####	V	SAMPLES
 	
-	Here are some sample Sudoku puzzles pretyped for testing the code:
+Here are some sample Sudoku puzzles pretyped for testing the code:
 	
 	S1 = [7 9 0 0 0 0 3 0 0; 0 0 0 0 0 6 9 0 0;8 0 0 0 3 0 0 7 6;0 0 0 0 0 5 0 0 2;0 0 5 4 1 8 7 0 0; 4 0 0 7 0 0 0 0 0;6 1 0 0 9 0 0 0 8;0 0 2 3 0 0 0 0 0;0 0 9 0 0 0 0 5 4]
 	S2 = [0 8 0 0 0 0 2 0 0;0 0 0 0 8 4 0 9 0;0 0 6 3 2 0 0 1 0;0 9 7 0 0 0 0 8 0;8 0 0 9 0 3 0 0 2;0 1 0 0 0 0 9 5 0;0 7 0 0 4 5 8 0 0;0 3 0 7 1 0 0 0 0;0 0 8 0 0 0 0 4 0]
@@ -97,7 +97,7 @@ V	SAMPLES
 	S4 = [4 0 0 0 2 0 0 0 3; 0 0 0 8 0 6 0 0 0;0 0 1 0 5 0 7 0 0;0 7 0 0 0 0 0 1 0;5 0 2 0 9 0 4 0 7; 0 4 4 0 0 0 0 6 0;0 0 9 0 8 0 2 0 0;0 0 0 2 0 1 0 0 0;8 0 0 0 6 0 0 0 5]
 	B = [ 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1]
 	
-	SAMPLE RUN WITHOUT ARGUMENT
+#####	SAMPLE RUN WITHOUT ARGUMENT
 	
 	>> sudoku
                    Sudoku Solver
@@ -142,7 +142,7 @@ V	SAMPLES
 	0
 	>> 
 	
-	SAMPLE RUN WITH ARGUMENT
+#####	SAMPLE RUN WITH ARGUMENT
 	
 	>> S2 = [0 8 0 0 0 0 2 0 0;0 0 0 0 8 4 0 9 0;0 0 6 3 2 0 0 1 0;0 9 7 0 0 0 0 8 0;8 0 0 9 0 3 0 0 2;0 1 0 0 0 0 9 5 0;0 7 0 0 4 5 8 0 0;0 3 0 7 1 0 0 0 0;0 0 8 0 0 0 0 4 0]
 
@@ -175,10 +175,10 @@ V	SAMPLES
 	0
 	>> 
 	
-	Read the HTML readme for images. 
+Read the HTML readme for images. 
 
-VI	SUPPORT
+####	VI	SUPPORT
 	
-	If you have issues with running the code or need technical support in general with
-	issues relating to running the program, you can get in touch with the developers at
-	skzafar.ali_ug19@ashoka.edu.in or kanan.gupta_ug19@ashoka.edu.in
+If you have issues with running the code or need technical support in general with
+issues relating to running the program, you can get in touch with the developers at
+skzafar.ali_ug19@ashoka.edu.in or kanan.gupta_ug19@ashoka.edu.in
