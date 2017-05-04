@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined, form the complete program.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined, form the complete program.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a and MATLAB&reg; Online (R2017a at the time of writing). Thus, it has been tested to run these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is an assumption that hasn't been tested.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
 <span class="keyword">if</span> ~nargin
     X = input([<span class="string">' Please input the sudoku puzzle as a 9x9 matrix of '</span><span class="keyword">...</span>
         <span class="string">'integers 1 to 9, and 0 for blank spaces.\n Each entry in'</span><span class="keyword">...</span>
@@ -242,7 +242,7 @@ candidates = nonzeros(full)';
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Repeatedly Fill Singletons<a name="8"></a></h2><p>The function keeps calling the previous two functions, i.e. 'CandidateCell' and 'FillSingletons' repeatedly as long as the matrix is changing. It stops when the matrix after attempting to fill singletons is the same as the matrix just before.</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, XCell]=RepeatCandidates(X)
+</pre><h2>Repeatedly Fill Singletons<a name="8"></a></h2><p>This function repeatedly calls the previous two functions, i.e. 'CandidateCell' and 'FillSingletons' as long as the matrix is changing. It stops when the matrix after attempting to fill singletons is the same as the matrix just before.</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, XCell]=RepeatCandidates(X)
     XCell=CandidateCell(X);
     Xnew=FillSingletons(X,XCell);
     <span class="keyword">while</span> abs(sum(sum(Xnew-X)))&gt;0
@@ -259,6 +259,13 @@ candidates = nonzeros(full)';
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
 % snippets here, combined, form the complete program. 
+% 
+% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
+% MATLAB(R) Online (R2017a at the time of writing). Thus, it has been
+% tested to run these versions of MATLAB(R). It should run on newer
+% versions and might run on versions a few years old, but this is an
+% assumption that hasn't been tested.
+% 
 
 %% Main Function
 %
@@ -501,8 +508,8 @@ end
 
 %% Repeatedly Fill Singletons
 %
-% The function keeps calling the previous two functions, i.e.
-% 'CandidateCell' and 'FillSingletons' repeatedly as long as the matrix is
+% This function repeatedly calls the previous two functions, i.e.
+% 'CandidateCell' and 'FillSingletons' as long as the matrix is
 % changing. It stops when the matrix after attempting to fill singletons is
 % the same as the matrix just before.
 %

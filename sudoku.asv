@@ -3,10 +3,21 @@
 % kind using a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
-% snippets here, combined, form the complete program. 
+% snippets here, combined together, form the complete program. 
 % 
-% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
-% MATLAB(R) Online (R2017a at the time of writing
+% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
+% MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
+% tested to run these versions of MATLAB(R). It should run on newer
+% versions and might run on versions a few years old, but this is just an
+% assumption that hasn't been tested.
+% 
+% This code requires MATLAB(R) to run. You need to have MATLAB(R) installed
+% on your system to run this program. Alternatively, you can use MATLAB(R)
+% Online to run this program which is just MATLAB(R) running on the cloud.
+% To run this program using MATLAB(R) Online, upload the 'sudoku.m' file 
+% to your MATLAB(R) Online's working directory and click on the 'Run'
+% button in the EDITOR tab.
+%
 % 
 
 %% Main Function
@@ -179,7 +190,7 @@ index=1:3:7;
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
 
-% Use the first row and first column to obtain the subgrid by incrementing
+% Use the first row and first column to obtain the sub-grid by incrementing
 % twice.
 
 block=X(sub_row:sub_row+2,sub_col:sub_col+2);
@@ -217,16 +228,23 @@ end
 %% Generate Cell Array
 % 
 % This function first creates a cell matrix from the input matrix. The blank
-% places are zeroes and the filled places contain the respective digits. A
-% cell matrix 
+% places are zeroes and the filled places contain the respective digits.
+% The cell array created is filled using the 'missing candidates' function
+% to create a cell matrix of possibilities.
+%
+% A matrix is an array of numbers - each position in a matrix can conatain
+% only one element of a specific type, integers in this case. In contrast,
+% a cell matrix or a cell array is a general container, which will hold any
+% object. A cell here is used so that in every position, an array can be
+% stored which contains the list of possible elements in that position.
 %
 
 function Xcell=CandidateCell(X)
-    Xcell=num2cell(X);
+    Xcell=num2cell(X);                                          % Create a cell array from the matrix
     for col=1:9
         for row=1:9
             if X(row,col)==0
-                Xcell{row,col}=missingcandidates(X,row,col);
+                Xcell{row,col}=missingcandidates(X,row,col);    % Call the missing candidates funtion to fill the array
             end
         end
     end
