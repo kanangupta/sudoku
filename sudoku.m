@@ -4,10 +4,21 @@
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
 % snippets here, combined together, form the complete program. 
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License in the LICENSE.md file for more details.
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % 
 % This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
 % MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
-% tested to run these versions of MATLAB(R). It should run on newer
+% tested to run on these versions of MATLAB(R). It should run on newer
 % versions and might run on versions a few years old, but this is just an
 % assumption that hasn't been tested.
 % 
@@ -17,22 +28,45 @@
 % To run this program using MATLAB(R) Online, upload the 'sudoku.m' file 
 % to your MATLAB(R) Online's working directory and click on the 'Run'
 % button in the EDITOR tab.
-%
+% If you have MATLAB installed on your system, open the source file in
+% MATLAB(R) and click on the 'Run' button from the EDITOR tab. In both the
+% cases, the code will run without any arguments and ask the user for the
+% input Sudoku puzzle before proceeding.
+% 
+% <<NoArguments.PNG>>
+% 
+% If the user already has 9x9
+% matrices of Sudoku puzzles in the workspace, then typing
+% 'sudoku(Sample1)' in the command window will run the program where
+% 'Sample1' is an example input matrix.
+% 
+% <<WithArg.PNG>>
 % 
 
 %% Main Function
 %
 % This is the main function that gets executed first when the program is
 % run. Typing "sudoku" in the MATLAB(R) command window will run the program
-% without any arguments. In such a case, the program will ask the user to
+% without any arguments and the program will ask the user to
 % enter a 9x9 sudoku matrix as the input argument.
 % Alternatively, the user can call the program with the 9x9 grid as an
 % argument.
 % 
 
 function sudoku(X)
+
+% When run without any arguments, the programs will prompt the user to
+% input the Sudoku puzzle.
+
 if ~nargin
-    X = input([' Please input the sudoku puzzle as a 9x9 matrix of '...
+    X = input(['                   Sudoku Solver\n    Copyright(C) 2017  Kanan '...
+        'Gupta & Sk Zafar Ali\n \n' ...
+        ' This program comes with ABSOLUTELY NO WARRANTY; \n' ...
+        ' This is free software under the GNU GPLv3 license'...
+        ' and you are welcome to\n redistribute it' ...
+        ' under certain conditions.\n For more information, read the'...
+        ' LICENSE and README files. \n \n' ...
+        ' Please input the sudoku puzzle as a 9x9 matrix of '...
         'integers 1 to 9, and 0 for blank spaces.\n Each entry in'...
         ' each row should be an integer from 0 to 9, separated by a '...
         'space.\n Each row should be separated by a semicolon (;). The'...

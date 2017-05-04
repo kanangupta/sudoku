@@ -66,9 +66,20 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined, form the complete program.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a and MATLAB&reg; Online (R2017a at the time of writing). Thus, it has been tested to run these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is an assumption that hasn't been tested.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined together, form the complete program.</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License in the LICENSE.md file for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a, and MATLAB&reg; Online (R2017a at the time of writing). As a result, it has been tested to run these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is just an assumption that hasn't been tested.</p><p>This code requires MATLAB&reg; to run. You need to have MATLAB&reg; installed on your system to run this program. Alternatively, you can use MATLAB&reg; Online to run this program which is just MATLAB&reg; running on the cloud. To run this program using MATLAB&reg; Online, upload the 'sudoku.m' file to your MATLAB&reg; Online's working directory and click on the 'Run' button in the EDITOR tab. If you have MATLAB installed on your system, open the source file in MATLAB&reg; and click on the 'Run' button from the EDITOR tab. In both the cases, the code will run without any arguments and ask the user for the input Sudoku puzzle before proceeding.</p><p><img vspace="5" hspace="5" src="NoArguments.PNG" alt=""> </p><p>If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an example input matrix.</p><p><img vspace="5" hspace="5" src="WithArg.PNG" alt=""> </p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments and the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+
+<span class="comment">% When run without any arguments, the programs will prompt the user to</span>
+<span class="comment">% input the Sudoku puzzle.</span>
+
 <span class="keyword">if</span> ~nargin
-    X = input([<span class="string">' Please input the sudoku puzzle as a 9x9 matrix of '</span><span class="keyword">...</span>
+    X = input([<span class="string">'                   Sudoku Solver\n    Copyright(C) 2017  Kanan '</span><span class="keyword">...</span>
+        <span class="string">'Gupta &amp; Sk Zafar Ali\n \n'</span> <span class="keyword">...</span>
+        <span class="string">' This program comes with ABSOLUTELY NO WARRANTY; \n'</span> <span class="keyword">...</span>
+        <span class="string">' This is free software under the GNU GPLv3 license'</span><span class="keyword">...</span>
+        <span class="string">' and you are welcome to\n redistribute it'</span> <span class="keyword">...</span>
+        <span class="string">' under certain conditions.\n For more information, read the'</span><span class="keyword">...</span>
+        <span class="string">' LICENSE and README files. \n \n'</span> <span class="keyword">...</span>
+        <span class="string">' Please input the sudoku puzzle as a 9x9 matrix of '</span><span class="keyword">...</span>
         <span class="string">'integers 1 to 9, and 0 for blank spaces.\n Each entry in'</span><span class="keyword">...</span>
         <span class="string">' each row should be an integer from 0 to 9, separated by a '</span><span class="keyword">...</span>
         <span class="string">'space.\n Each row should be separated by a semicolon (;). The'</span><span class="keyword">...</span>
@@ -196,7 +207,7 @@ index=1:3:7;
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
 
-<span class="comment">% Use the first row and first column to obtain the subgrid by incrementing</span>
+<span class="comment">% Use the first row and first column to obtain the sub-grid by incrementing</span>
 <span class="comment">% twice.</span>
 
 block=X(sub_row:sub_row+2,sub_col:sub_col+2);
@@ -223,12 +234,12 @@ full(nonzeros(sub_block(X,row,col)))= 0;
 
 candidates = nonzeros(full)';
 <span class="keyword">end</span>
-</pre><h2>Generate Cell Array<a name="6"></a></h2><p>This function first creates a cell matrix from the input matrix. The blank places are zeroes and the filled places contain the respective digits. A cell matrix</p><pre class="codeinput"><span class="keyword">function</span> Xcell=CandidateCell(X)
-    Xcell=num2cell(X);
+</pre><h2>Generate Cell Array<a name="6"></a></h2><p>This function first creates a cell matrix from the input matrix. The blank places are zeroes and the filled places contain the respective digits. The cell array created is filled using the 'missing candidates' function to create a cell matrix of possibilities.</p><p>A matrix is an array of numbers - each position in a matrix can conatain only one element of a specific type, integers in this case. In contrast, a cell matrix or a cell array is a general container, which will hold any object. A cell here is used so that in every position, an array can be stored which contains the list of possible elements in that position.</p><pre class="codeinput"><span class="keyword">function</span> Xcell=CandidateCell(X)
+    Xcell=num2cell(X);                                          <span class="comment">% Create a cell array from the matrix</span>
     <span class="keyword">for</span> col=1:9
         <span class="keyword">for</span> row=1:9
             <span class="keyword">if</span> X(row,col)==0
-                Xcell{row,col}=missingcandidates(X,row,col);
+                Xcell{row,col}=missingcandidates(X,row,col);    <span class="comment">% Call the missing candidates funtion to fill the array</span>
             <span class="keyword">end</span>
         <span class="keyword">end</span>
     <span class="keyword">end</span>
@@ -258,28 +269,70 @@ candidates = nonzeros(full)';
 % kind using a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
-% snippets here, combined, form the complete program. 
+% snippets here, combined together, form the complete program. 
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License in the LICENSE.md file for more details.
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % 
-% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
-% MATLAB(R) Online (R2017a at the time of writing). Thus, it has been
+% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a, and
+% MATLAB(R) Online (R2017a at the time of writing). As a result, it has been
 % tested to run these versions of MATLAB(R). It should run on newer
-% versions and might run on versions a few years old, but this is an
+% versions and might run on versions a few years old, but this is just an
 % assumption that hasn't been tested.
+% 
+% This code requires MATLAB(R) to run. You need to have MATLAB(R) installed
+% on your system to run this program. Alternatively, you can use MATLAB(R)
+% Online to run this program which is just MATLAB(R) running on the cloud.
+% To run this program using MATLAB(R) Online, upload the 'sudoku.m' file 
+% to your MATLAB(R) Online's working directory and click on the 'Run'
+% button in the EDITOR tab.
+% If you have MATLAB installed on your system, open the source file in
+% MATLAB(R) and click on the 'Run' button from the EDITOR tab. In both the
+% cases, the code will run without any arguments and ask the user for the
+% input Sudoku puzzle before proceeding.
+% 
+% <<NoArguments.PNG>>
+% 
+% If the user already has 9x9
+% matrices of Sudoku puzzles in the workspace, then typing
+% 'sudoku(Sample1)' in the command window will run the program where
+% 'Sample1' is an example input matrix.
+% 
+% <<WithArg.PNG>>
 % 
 
 %% Main Function
 %
 % This is the main function that gets executed first when the program is
 % run. Typing "sudoku" in the MATLAB(R) command window will run the program
-% without any arguments. In such a case, the program will ask the user to
+% without any arguments and the program will ask the user to
 % enter a 9x9 sudoku matrix as the input argument.
 % Alternatively, the user can call the program with the 9x9 grid as an
 % argument.
 % 
 
 function sudoku(X)
+
+% When run without any arguments, the programs will prompt the user to
+% input the Sudoku puzzle.
+
 if ~nargin
-    X = input([' Please input the sudoku puzzle as a 9x9 matrix of '...
+    X = input(['                   Sudoku Solver\n    Copyright(C) 2017  Kanan '...
+        'Gupta & Sk Zafar Ali\n \n' ...
+        ' This program comes with ABSOLUTELY NO WARRANTY; \n' ...
+        ' This is free software under the GNU GPLv3 license'...
+        ' and you are welcome to\n redistribute it' ...
+        ' under certain conditions.\n For more information, read the'...
+        ' LICENSE and README files. \n \n' ...
+        ' Please input the sudoku puzzle as a 9x9 matrix of '...
         'integers 1 to 9, and 0 for blank spaces.\n Each entry in'...
         ' each row should be an integer from 0 to 9, separated by a '...
         'space.\n Each row should be separated by a semicolon (;). The'...
@@ -437,7 +490,7 @@ index=1:3:7;
 sub_row=index(ceil(row/3));
 sub_col=index(ceil(col/3));
 
-% Use the first row and first column to obtain the subgrid by incrementing
+% Use the first row and first column to obtain the sub-grid by incrementing
 % twice.
 
 block=X(sub_row:sub_row+2,sub_col:sub_col+2);
@@ -475,16 +528,23 @@ end
 %% Generate Cell Array
 % 
 % This function first creates a cell matrix from the input matrix. The blank
-% places are zeroes and the filled places contain the respective digits. A
-% cell matrix 
+% places are zeroes and the filled places contain the respective digits.
+% The cell array created is filled using the 'missing candidates' function
+% to create a cell matrix of possibilities.
+%
+% A matrix is an array of numbers - each position in a matrix can conatain
+% only one element of a specific type, integers in this case. In contrast,
+% a cell matrix or a cell array is a general container, which will hold any
+% object. A cell here is used so that in every position, an array can be
+% stored which contains the list of possible elements in that position.
 %
 
 function Xcell=CandidateCell(X)
-    Xcell=num2cell(X);
+    Xcell=num2cell(X);                                          % Create a cell array from the matrix
     for col=1:9
         for row=1:9
             if X(row,col)==0
-                Xcell{row,col}=missingcandidates(X,row,col);
+                Xcell{row,col}=missingcandidates(X,row,col);    % Call the missing candidates funtion to fill the array
             end
         end
     end
