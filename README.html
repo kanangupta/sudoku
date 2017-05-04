@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined together, form the complete program.</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License in the LICENSE.md file for more details. If the LICENSE file is missing, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a, and MATLAB&reg; Online (R2017a at the time of writing). As a result, it has been tested to run on these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is just an assumption that hasn't been tested.</p><p>This code requires MATLAB&reg; to run. You need to have MATLAB&reg; installed on your system to run this program. Alternatively, you can use MATLAB&reg; Online to run this program which is just MATLAB&reg; running on the cloud. To run this program using MATLAB&reg; Online, upload the 'sudoku.m' file to your MATLAB&reg; Online's working directory and click on the 'Run' button in the EDITOR tab. If you have MATLAB&reg; R2015a or later installed on your system, open the source file in MATLAB&reg; and click on the 'Run' button from the EDITOR tab. In both the cases, the code will run without any arguments and ask the user for the input Sudoku puzzle before proceeding.</p><p><img vspace="5" hspace="5" src="NoArguments.PNG" alt=""> </p><p>If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an example input matrix.</p><p><img vspace="5" hspace="5" src="WithArg.PNG" alt=""> </p><p>The following sections of this webpage contain the documented code for the easy understanding of anyone who wishes to reuse this code in part or full. This, along with the README.md and LICENSE.md file, form the complete documentation for this project.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments and the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve 9x9 sudoku puzzles using candidate-checking and a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined together, form the complete program.</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License in the LICENSE.md file for more details. If the LICENSE file is missing, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><p>This program has been written in MATLAB&reg; R2015a, MATLAB&reg; R2016a, and MATLAB&reg; Online (R2017a at the time of writing). As a result, it has been tested to run on these versions of MATLAB&reg;. It should run on newer versions and might run on versions a few years old, but this is just an assumption that hasn't been tested.</p><p>This code requires MATLAB&reg; to run. You need to have MATLAB&reg; installed on your system to run this program. Alternatively, you can use MATLAB&reg; Online to run this program which is just MATLAB&reg; running on the cloud. To run this program using MATLAB&reg; Online, upload the 'sudoku.m' file to your MATLAB&reg; Online's working directory and click on the 'Run' button in the EDITOR tab. If you have MATLAB&reg; R2015a or later installed on your system, open the source file in MATLAB&reg; and click on the 'Run' button from the EDITOR tab. Alternatively, change the working directory to the one containing the 'sudoku.m' file, and enter 'sudoku' in the command window. In both the cases, the code will run without any arguments and ask the user for the input Sudoku puzzle before proceeding. The program expects the user to enter a 9x9 matrix of numbers from 0 to 9.</p><p><img vspace="5" hspace="5" src="NoArguments.PNG" alt=""> </p><p>If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an example input matrix.</p><p><img vspace="5" hspace="5" src="WithArg.PNG" alt=""> </p><p>The following sections of this webpage contain the documented code for the easy understanding of anyone who wishes to reuse this code in part or full. This, along with the README.md and LICENSE.md file, form the complete documentation for this project.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Recursive Solver</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments and the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
 
 <span class="comment">% When run without any arguments, the programs will prompt the user to</span>
 <span class="comment">% input the Sudoku puzzle.</span>
@@ -114,7 +114,7 @@ again=input([<span class="string">'\n Do you want to solve another sudoku puzzle
     sudoku
 <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Solver Main Function<a name="2"></a></h2><pre class="codeinput"><span class="keyword">function</span> [X,solved]=solver(X)
+</pre><h2>Recursive Solver<a name="2"></a></h2><p>The function calls 'RepeatCandidates' to generate cell of possible candidates for each position and fills in the positions where only one possibility exists.</p><p>If the puzzle stops being a valid sudoku at any time or if there in an empty position with no possible candidates, the function returns to the previous iteraton; if it's in its first iteration, it declares the puzzle unsolvable.</p><p>It proceeds to find the first empty position and fills in the possible candidates for that position, and then calls itself with the updated matrix. If it is solved, it declares the puzzle solved, otherwise it tries with other possible canidates until it is solved.</p><pre class="codeinput"><span class="keyword">function</span> [X,solved]=solver(X)
 [X,Xcell]=RepeatCandidates(X);
 <span class="keyword">if</span> ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     solved=false;
@@ -265,8 +265,8 @@ candidates = nonzeros(full)';
 </pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Sudoku Solver
-% This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
-% kind using a brute force algorithm called backtracking. This html
+% This is a MATLAB(R) program designed to solve 9x9 sudoku puzzles using
+% candidate-checking and a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
 % snippets here, combined together, form the complete program. 
@@ -295,8 +295,11 @@ candidates = nonzeros(full)';
 % button in the EDITOR tab.
 % If you have MATLAB(R) R2015a or later installed on your system, 
 % open the source file in MATLAB(R) and click on the 'Run' button from the
-% EDITOR tab. In both the cases, the code will run without any arguments
-% and ask the user for the input Sudoku puzzle before proceeding.
+% EDITOR tab. Alternatively, change the working directory to the one containing
+% the 'sudoku.m' file, and enter 'sudoku' in the command window. In both the
+% cases, the code will run without any arguments and ask the user for the input
+% Sudoku puzzle before proceeding. The program expects the user to enter a
+% 9x9 matrix of numbers from 0 to 9.
 % 
 % <<NoArguments.PNG>>
 % 
@@ -371,9 +374,22 @@ if again
 end
 end
 
-%% Solver Main Function
+%% Recursive Solver
 % 
+% The function calls 'RepeatCandidates' to generate cell of possible
+% candidates for each position and fills in the positions where only one
+% possibility exists.
+%
+% If the puzzle stops being a valid sudoku at any time
+% or if there in an empty position with no possible candidates, the function
+% returns to the previous iteraton; if it's in its first iteration, it
+% declares the puzzle unsolvable.
 % 
+% It proceeds to find the first empty
+% position and fills in the possible candidates for that position, and then
+% calls itself with the updated matrix. If it is solved, it declares the
+% puzzle solved, otherwise it tries with other possible canidates until it
+% is solved. 
 % 
 
 function [X,solved]=solver(X)

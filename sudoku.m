@@ -1,6 +1,6 @@
 %% Sudoku Solver
-% This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
-% kind using a brute force algorithm called backtracking. This html
+% This is a MATLAB(R) program designed to solve 9x9 sudoku puzzles using
+% candidate-checking and a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
 % snippets here, combined together, form the complete program. 
@@ -29,8 +29,11 @@
 % button in the EDITOR tab.
 % If you have MATLAB(R) R2015a or later installed on your system, 
 % open the source file in MATLAB(R) and click on the 'Run' button from the
-% EDITOR tab. In both the cases, the code will run without any arguments
-% and ask the user for the input Sudoku puzzle before proceeding.
+% EDITOR tab. Alternatively, change the working directory to the one containing
+% the 'sudoku.m' file, and enter 'sudoku' in the command window. In both the
+% cases, the code will run without any arguments and ask the user for the input
+% Sudoku puzzle before proceeding. The program expects the user to enter a
+% 9x9 matrix of numbers from 0 to 9.
 % 
 % <<NoArguments.PNG>>
 % 
@@ -105,9 +108,22 @@ if again
 end
 end
 
-%% Solver Main Function
+%% Recursive Solver
 % 
+% The function calls 'RepeatCandidates' to generate cell of possible
+% candidates for each position and fills in the positions where only one
+% possibility exists.
+%
+% If the puzzle stops being a valid sudoku at any time
+% or if there in an empty position with no possible candidates, the function
+% returns to the previous iteraton; if it's in its first iteration, it
+% declares the puzzle unsolvable.
 % 
+% It proceeds to find the first empty
+% position and fills in the possible candidates for that position, and then
+% calls itself with the updated matrix. If it is solved, it declares the
+% puzzle solved, otherwise it tries with other possible canidates until it
+% is solved. 
 % 
 
 function [X,solved]=solver(X)
