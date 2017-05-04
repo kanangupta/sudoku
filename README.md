@@ -1,4 +1,4 @@
-                    Sudoku Solver in MATLAB(R)
+Sudoku Solver in MATLAB(R)
 
 This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
 kind using a brute force algorithm called backtracking. 
