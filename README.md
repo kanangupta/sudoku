@@ -31,7 +31,8 @@ HOW TO USE THIS PROGRAM
 	II	SYSTEM REQUIREMENTS
 	III	INSTALLATION
 	IV	EXECUTION
-	V	SUPPORT
+	V	SAMPLES
+	VI	SUPPORT
 
 I	PURPOSE
 
@@ -87,7 +88,100 @@ IV	EXECUTION
 	
 	Read the HTML readme for more help on this.
 	
-V	SUPPORT
+	Sample run without arguments:
+	
+	
+V	SAMPLES
+	
+	Here are some sample Sudoku puzzles pretyped for testing the code:
+	
+	S1 = [7 9 0 0 0 0 3 0 0; 0 0 0 0 0 6 9 0 0;8 0 0 0 3 0 0 7 6;0 0 0 0 0 5 0 0 2;0 0 5 4 1 8 7 0 0; 4 0 0 7 0 0 0 0 0;6 1 0 0 9 0 0 0 8;0 0 2 3 0 0 0 0 0;0 0 9 0 0 0 0 5 4]
+	S2 = [0 8 0 0 0 0 2 0 0;0 0 0 0 8 4 0 9 0;0 0 6 3 2 0 0 1 0;0 9 7 0 0 0 0 8 0;8 0 0 9 0 3 0 0 2;0 1 0 0 0 0 9 5 0;0 7 0 0 4 5 8 0 0;0 3 0 7 1 0 0 0 0;0 0 8 0 0 0 0 4 0]
+	S3 = [0 0 5 0 0 9 0 0 1; 0 1 0 0 6 0 0 9 0;7 0 0 1 0 0 2 0 0;9 0 0 7 0 0 4 0 0;0 8 0 0 4 0 0 3 0; 0 0 2 0 0 8 0 0 6;0 0 9 0 0 6 0 0 2;0 5 0 0 9 0 0 1 0;8 0 0 4 0 0 7 0 0]
+	S4 = [4 0 0 0 2 0 0 0 3; 0 0 0 8 0 6 0 0 0;0 0 1 0 5 0 7 0 0;0 7 0 0 0 0 0 1 0;5 0 2 0 9 0 4 0 7; 0 4 4 0 0 0 0 6 0;0 0 9 0 8 0 2 0 0;0 0 0 2 0 1 0 0 0;8 0 0 0 6 0 0 0 5]
+	B = [ 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1]
+	
+	SAMPLE RUN WITHOUT ARGUMENT
+	
+	>> sudoku
+                   Sudoku Solver
+    Copyright(C) 2017  Kanan Gupta & Sk Zafar Ali
+ 
+	 This program comes with ABSOLUTELY NO WARRANTY; 
+	 This is free software under the GNU GPLv3 license and you are welcome to
+	 redistribute it under certain conditions.
+	 For more information, read the LICENSE and README files. 
+	 
+	 Please input the sudoku puzzle as a 9x9 matrix of integers 1 to 9, and 0 for blank spaces.
+	 Each entry in each row should be an integer from 0 to 9, separated by a space.
+	 Each row should be separated by a semicolon (;). The input should be enclosed in square brackets [ ].
+	 For example, a 3x3 matrix would be written like this: [1 2 3;4 5 6;7 8 9].
+	 [0 0 5 0 0 9 0 0 1; 0 1 0 0 6 0 0 9 0;7 0 0 1 0 0 2 0 0;9 0 0 7 0 0 4 0 0;0 8 0 0 4 0 0 3 0; 0 0 2 0 0 8 0 0 6;0 0 9 0 0 6 0 0 2;0 5 0 0 9 0 0 1 0;8 0 0 4 0 0 7 0 0]
+
+	X =
+
+		 0     0     5     0     0     9     0     0     1
+		 0     1     0     0     6     0     0     9     0
+		 7     0     0     1     0     0     2     0     0
+		 9     0     0     7     0     0     4     0     0
+		 0     8     0     0     4     0     0     3     0
+		 0     0     2     0     0     8     0     0     6
+		 0     0     9     0     0     6     0     0     2
+		 0     5     0     0     9     0     0     1     0
+		 8     0     0     4     0     0     7     0     0
+
+	The solved sudoku is :
+
+	 6  2  5  3  7  9  8  4  1 
+	 3  1  8  2  6  4  5  9  7 
+	 7  9  4  1  8  5  2  6  3 
+	 9  3  6  7  5  1  4  2  8 
+	 1  8  7  6  4  2  9  3  5 
+	 5  4  2  9  3  8  1  7  6 
+	 4  7  9  5  1  6  3  8  2 
+	 2  5  3  8  9  7  6  1  4 
+	 8  6  1  4  2  3  7  5  9 
+
+	 Do you want to solve another sudoku puzzle? Enter 0 for No, and any non-zero number for Yes.
+	0
+	>> 
+	
+	SAMPLE RUN WITH ARGUMENT
+	
+	>> S2 = [0 8 0 0 0 0 2 0 0;0 0 0 0 8 4 0 9 0;0 0 6 3 2 0 0 1 0;0 9 7 0 0 0 0 8 0;8 0 0 9 0 3 0 0 2;0 1 0 0 0 0 9 5 0;0 7 0 0 4 5 8 0 0;0 3 0 7 1 0 0 0 0;0 0 8 0 0 0 0 4 0]
+
+	S2 =
+
+		 0     8     0     0     0     0     2     0     0
+		 0     0     0     0     8     4     0     9     0
+		 0     0     6     3     2     0     0     1     0
+		 0     9     7     0     0     0     0     8     0
+		 8     0     0     9     0     3     0     0     2
+		 0     1     0     0     0     0     9     5     0
+		 0     7     0     0     4     5     8     0     0
+		 0     3     0     7     1     0     0     0     0
+		 0     0     8     0     0     0     0     4     0
+
+	>> sudoku(S2)
+	The solved sudoku is :
+
+	 7  8  4  1  9  6  2  3  5 
+	 3  2  1  5  8  4  6  9  7 
+	 9  5  6  3  2  7  4  1  8 
+	 2  9  7  4  5  1  3  8  6 
+	 8  4  5  9  6  3  1  7  2 
+	 6  1  3  8  7  2  9  5  4 
+	 1  7  9  6  4  5  8  2  3 
+	 4  3  2  7  1  8  5  6  9 
+	 5  6  8  2  3  9  7  4  1 
+
+	 Do you want to solve another sudoku puzzle? Enter 0 for No, and any non-zero number for Yes.
+	0
+	>> 
+
+VI	SUPPORT
+
+	
 	
 	
 	
