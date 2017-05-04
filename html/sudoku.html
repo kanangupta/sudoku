@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Update Function 1</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Recursive Call</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
+  </style></head><body><div class="content"><h1>Sudoku Solver</h1><!--introduction--><p>This is a MATLAB&reg; program designed to solve sudoku puzzles of the 9x9 kind using a brute force algorithm called backtracking. This html documentation has been generated using MATLAB&reg;'s publishing feature. Text highlighted in green within code snippets are comments. The code snippets here, combined, form the complete program.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Main Function</a></li><li><a href="#2">Solver Main Function</a></li><li><a href="#3">Validity Check</a></li><li><a href="#4">Obtain Sub-Grid for a Position</a></li><li><a href="#5">Find Possible Candidates</a></li><li><a href="#6">Generate Cell Array</a></li><li><a href="#7">Fill Singletons</a></li><li><a href="#8">Repeatedly Fill Singletons</a></li></ul></div><h2>Main Function<a name="1"></a></h2><p>This is the main function that gets executed first when the program is run. Typing "sudoku" in the MATLAB&reg; command window will run the program without any arguments. In such a case, the program will ask the user to enter a 9x9 sudoku matrix as the input argument. Alternatively, the user can call the program with the 9x9 grid as an argument.</p><pre class="codeinput"><span class="keyword">function</span> sudoku(X)
 <span class="keyword">if</span> ~nargin
     X = input([<span class="string">' Please input the sudoku puzzle as a 9x9 matrix of '</span><span class="keyword">...</span>
         <span class="string">'integers 1 to 9, and 0 for blank spaces.\n Each entry in'</span><span class="keyword">...</span>
@@ -110,7 +110,7 @@ again=input([<span class="string">'\n Do you want to solve another sudoku puzzle
     <span class="keyword">return</span> <span class="comment">%unsolvable</span>
 <span class="keyword">end</span>
 <span class="keyword">if</span> any(X(:)==0)
-    firstzero=find(X==0,1);
+    firstzero=find(X==0,1); <span class="comment">% Finds the first position with no value assigned to it</span>
     Y=X;
     <span class="keyword">for</span> i=Xcell{firstzero}
         X=Y;
@@ -223,7 +223,7 @@ full(nonzeros(sub_block(X,row,col)))= 0;
 
 candidates = nonzeros(full)';
 <span class="keyword">end</span>
-</pre><h2>Update Function 1<a name="6"></a></h2><p>This function checks for missing places in the cell and updates them as necessary.</p><pre class="codeinput"><span class="keyword">function</span> Xcell=CandidateCell(X)
+</pre><h2>Generate Cell Array<a name="6"></a></h2><p>This function first creates a cell matrix from the input matrix. The blank places are zeroes and the filled places contain the respective digits. A cell matrix</p><pre class="codeinput"><span class="keyword">function</span> Xcell=CandidateCell(X)
     Xcell=num2cell(X);
     <span class="keyword">for</span> col=1:9
         <span class="keyword">for</span> row=1:9
@@ -233,22 +233,22 @@ candidates = nonzeros(full)';
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Fill Singletons<a name="7"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> X=FillSingletons(X,Xcell)
+</pre><h2>Fill Singletons<a name="7"></a></h2><p>This function checks the cell array for positions where only one possibility exists and then proceeds to fill these singletons.</p><pre class="codeinput"><span class="keyword">function</span> X=FillSingletons(X,Xcell)
     <span class="keyword">for</span> col=1:9
         <span class="keyword">for</span> row=1:9
-            <span class="keyword">if</span> size(Xcell{row,col},2)==1
-                X(row,col)=Xcell{row,col};
+            <span class="keyword">if</span> size(Xcell{row,col},2)==1    <span class="comment">% If only one possibility exists,</span>
+                X(row,col)=Xcell{row,col};  <span class="comment">% fill it in the matrix</span>
             <span class="keyword">end</span>
         <span class="keyword">end</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
-</pre><h2>Recursive Call<a name="8"></a></h2><p>The</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, XCell]=RepeatCandidates(X)
+</pre><h2>Repeatedly Fill Singletons<a name="8"></a></h2><p>The function keeps calling the previous two functions, i.e. 'CandidateCell' and 'FillSingletons' repeatedly as long as the matrix is changing. It stops when the matrix after attempting to fill singletons is the same as the matrix just before.</p><pre class="codeinput"><span class="keyword">function</span> [Xnew, XCell]=RepeatCandidates(X)
     XCell=CandidateCell(X);
     Xnew=FillSingletons(X,XCell);
     <span class="keyword">while</span> abs(sum(sum(Xnew-X)))&gt;0
-        X=Xnew;
-        XCell=CandidateCell(X);
-        Xnew=FillSingletons(X,XCell);
+        X=Xnew;                         <span class="comment">% Result becomes the input for the next loop</span>
+        XCell=CandidateCell(X);         <span class="comment">% Generate Cell Array</span>
+        Xnew=FillSingletons(X,XCell);   <span class="comment">% Fill Singletons</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 </pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
@@ -257,7 +257,8 @@ candidates = nonzeros(full)';
 % This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
 % kind using a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
-% Text highlighted in green within code snippets are comments.
+% Text highlighted in green within code snippets are comments. The code
+% snippets here, combined, form the complete program. 
 
 %% Main Function
 %
@@ -319,7 +320,7 @@ if ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     return %unsolvable
 end
 if any(X(:)==0)
-    firstzero=find(X==0,1);
+    firstzero=find(X==0,1); % Finds the first position with no value assigned to it
     Y=X;
     for i=Xcell{firstzero}
         X=Y;
@@ -464,10 +465,11 @@ full(nonzeros(sub_block(X,row,col)))= 0;
 candidates = nonzeros(full)'; 
 end
 
-%% Update Function 1
+%% Generate Cell Array
 % 
-% This function checks for missing places in the cell and updates them as
-% necessary.
+% This function first creates a cell matrix from the input matrix. The blank
+% places are zeroes and the filled places contain the respective digits. A
+% cell matrix 
 %
 
 function Xcell=CandidateCell(X)
@@ -483,31 +485,35 @@ end
                 
 %% Fill Singletons
 % 
-% The
+% This function checks the cell array for positions where only one
+% possibility exists and then proceeds to fill these singletons. 
 % 
 
 function X=FillSingletons(X,Xcell)
     for col=1:9
         for row=1:9
-            if size(Xcell{row,col},2)==1
-                X(row,col)=Xcell{row,col};
+            if size(Xcell{row,col},2)==1    % If only one possibility exists,
+                X(row,col)=Xcell{row,col};  % fill it in the matrix
             end
         end
     end
 end
 
-%% Recursive Call
+%% Repeatedly Fill Singletons
 %
-% The
+% The function keeps calling the previous two functions, i.e.
+% 'CandidateCell' and 'FillSingletons' repeatedly as long as the matrix is
+% changing. It stops when the matrix after attempting to fill singletons is
+% the same as the matrix just before.
 %
 
 function [Xnew, XCell]=RepeatCandidates(X)
     XCell=CandidateCell(X);
     Xnew=FillSingletons(X,XCell);
     while abs(sum(sum(Xnew-X)))>0
-        X=Xnew;
-        XCell=CandidateCell(X);
-        Xnew=FillSingletons(X,XCell);
+        X=Xnew;                         % Result becomes the input for the next loop
+        XCell=CandidateCell(X);         % Generate Cell Array
+        Xnew=FillSingletons(X,XCell);   % Fill Singletons
     end
 end
 

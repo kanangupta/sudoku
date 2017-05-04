@@ -3,8 +3,11 @@
 % kind using a brute force algorithm called backtracking. This html
 % documentation has been generated using MATLAB(R)'s publishing feature.
 % Text highlighted in green within code snippets are comments. The code
-% snippets here, combined, form the complete program. There is no code that
-% this program uses which isn't present here.
+% snippets here, combined, form the complete program. 
+% 
+% This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
+% MATLAB(R) Online (R2017a at the time of writing
+% 
 
 %% Main Function
 %
@@ -66,7 +69,7 @@ if ~valid_sudoku(X) || any(any(cellfun(@isempty,Xcell)))
     return %unsolvable
 end
 if any(X(:)==0)
-    firstzero=find(X==0,1);
+    firstzero=find(X==0,1); % Finds the first position with no value assigned to it
     Y=X;
     for i=Xcell{firstzero}
         X=Y;
@@ -238,24 +241,27 @@ end
 function X=FillSingletons(X,Xcell)
     for col=1:9
         for row=1:9
-            if size(Xcell{row,col},2)==1
-                X(row,col)=Xcell{row,col};
+            if size(Xcell{row,col},2)==1    % If only one possibility exists,
+                X(row,col)=Xcell{row,col};  % fill it in the matrix
             end
         end
     end
 end
 
-%% Recursive Call
+%% Repeatedly Fill Singletons
 %
-% The
+% This function repeatedly calls the previous two functions, i.e.
+% 'CandidateCell' and 'FillSingletons' as long as the matrix is
+% changing. It stops when the matrix after attempting to fill singletons is
+% the same as the matrix just before.
 %
 
 function [Xnew, XCell]=RepeatCandidates(X)
     XCell=CandidateCell(X);
     Xnew=FillSingletons(X,XCell);
     while abs(sum(sum(Xnew-X)))>0
-        X=Xnew;
-        XCell=CandidateCell(X);
-        Xnew=FillSingletons(X,XCell);
+        X=Xnew;                         % Result becomes the input for the next loop
+        XCell=CandidateCell(X);         % Generate Cell Array
+        Xnew=FillSingletons(X,XCell);   % Fill Singletons
     end
 end
