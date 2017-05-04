@@ -1,8 +1,8 @@
 Sudoku Solver in MATLAB(R)
 --------------------------
 
-This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
-kind using a brute force algorithm called backtracking. 
+This is a MATLAB(R) program designed to solve 9x9 sudoku puzzles using
+candidate-checking and a brute force algorithm called backtracking. 
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,15 +56,31 @@ Advantages of this method are:
    2.	Solving time is mostly unrelated to degree of difficulty.
 
 ####	II	SYSTEM REQUIREMENTS
+   
+   This program was made and tested on two systems with the following specifications:
+   
+######	System 1
 
-   1 gigahertz (GHz) or faster 32-bit (x86) or 64-bit (x64) processor
-   1 gigabyte (GB) RAM (32-bit) or 2 GB RAM (64-bit)
-   MATLAB(R) R2015a or later installed
+	Intel Core i7 2.5 Ghz (Turbo Boost 3.5 Ghz)
+	8 GB DDR3 RAM
+	Intel HD 4600 Integrated Graphics
+	NVIDIA GTX 860M Dedicated GPU with 4 GB GDDR5 Memory
+	Windows 10 Pro 64-bit Build 1703 (Creator's Update)
+	MATLAB(R) R2015a
+	
+######	System 2
 
--OR-
+	Intel Core i3 1.8 Ghz
+	6 GB DDR3 RAM
+	Intel HD 4000 Integrated Graphics
+	Windows 10 Home Single Language 64-bit Build 1607
+	MATLAB(R) R2016a
 
-   Computer with Internet access
-   Browser capable of running MATLAB(R) Online (Chrome 50 or later should be fine)
+   Any computer with Internet access which is powerful enough to run
+   MATLAB(R) R2015a or later should be able to run this program just fine.
+   
+   To run on MATLAB(R) Online, you'll need a computer with a web browser capable
+   of running MATLAB(R) Online (Chrome 50 or later should be fine).
 
 ####	III	INSTALLATION
 	
@@ -80,8 +96,9 @@ but this hasn't been tested.
 ####	IV	EXECUTION
 	
 Once you have the file open in MATLAB(R), run this program by clicking on the 'Run'
-button in the EDITOR tab. The code will run without any arguments and ask the user 
-for the input Sudoku puzzle before proceeding.
+button in the EDITOR tab. Alternatively, change the working directory to the one
+containing the 'sudoku.m' file, and enter 'sudoku' in the command window. The code will
+run without any arguments and ask the user for the input Sudoku puzzle before proceeding.
 
 If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing
 'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an
