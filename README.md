@@ -1,4 +1,5 @@
 Sudoku Solver in MATLAB(R)
+--------------------------
 
 This is a MATLAB(R) program designed to solve sudoku puzzles of the 9x9 
 kind using a brute force algorithm called backtracking. 
@@ -85,11 +86,6 @@ IV	EXECUTION
 	If the user already has 9x9 matrices of Sudoku puzzles in the workspace, then typing
 	'sudoku(Sample1)' in the command window will run the program where 'Sample1' is an
 	example input matrix.
-	
-	Read the HTML readme for more help on this.
-	
-	Sample run without arguments:
-	
 	
 V	SAMPLES
 	
@@ -178,12 +174,11 @@ V	SAMPLES
 	 Do you want to solve another sudoku puzzle? Enter 0 for No, and any non-zero number for Yes.
 	0
 	>> 
+	
+	Read the HTML readme for images. 
 
 VI	SUPPORT
-
 	
-	
-	
-	
-This program has been written in MATLAB(R) R2015a, MATLAB(R) R2016a and
-MATLAB(R) Online (R2017a at the time of writing)
+	If you have issues with running the code or need technical support in general with
+	issues relating to running the program, you can get in touch with the developers at
+	skzafar.ali_ug19@ashoka.edu.in or kanan.gupta_ug19@ashoka.edu.in
