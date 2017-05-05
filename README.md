@@ -50,7 +50,7 @@ digits is allowed, then the algorithm leaves that cell blank and moves back
 to the previous cell. The value in that cell is then incremented by one.
 This is repeated until the allowed value in the last (81st) cell is discovered.
 
-Our algorithm refines on backtracking by first using the candidate-checking
+Our algorithm refines on backtracking by using the candidate-checking
 method repeatedly in every recursive call to the function. The candiate-checking
 method uses some native set theory to determine possible candidates for every
 empty position. This reduces the workload for backtracking significantly
