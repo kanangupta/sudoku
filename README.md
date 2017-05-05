@@ -200,7 +200,7 @@ Here are some sample Sudoku puzzles pretyped for testing the code:
 	0
 	>> 
 	
-Read the HTML readme for images. 
+Read README.html to see the documented code rather than going through the source ('sudoku.m').
 
 ####	VI	SUPPORT
 	
