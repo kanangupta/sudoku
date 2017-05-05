@@ -37,10 +37,10 @@ for brute force approach to solving Sudokus.
 
 ####	I	PURPOSE
 
-This program solves 9x9 Sudoku puzzles using a brute force algorithm called
-Backtracking. This brute force algorithm visits the empty cells in some order,
-filling in digits sequentially, or backtracking when the number is found to
-be not valid. Briefly, a program would solve a puzzle by placing the
+This program solves 9x9 Sudoku puzzles using candidate-checking and a brute force
+algorithm called backtracking. This brute force algorithm visits the empty cells in
+some order, filling in digits sequentially, or backtracking when the number is
+found to be not valid. Briefly, a program would solve a puzzle by placing the
 digit "1" in the first cell and checking if it is allowed to be there.
 If there are no violations (checking row, column, and box constraints) then
 the algorithm advances to the next cell, and places a "1" in that cell.
@@ -49,6 +49,14 @@ the value is advanced to "2". If a cell is discovered where none of the 9
 digits is allowed, then the algorithm leaves that cell blank and moves back
 to the previous cell. The value in that cell is then incremented by one.
 This is repeated until the allowed value in the last (81st) cell is discovered.
+
+Our algorithm refines on backtracking by first using the candidate-checking
+method repeatedly in every recursive call to the function. The candiate-checking
+method uses some native set theory to determine possible candidates for every
+empty position. This reduces the workload for backtracking significantly
+as it first finds out the valid candidates and tried only those, instead of
+first trying every number and then removing the invalid ones, unlike traditional
+backtracking.
 
 Advantages of this method are:
 
